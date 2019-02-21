@@ -15,3 +15,6 @@ type 'a ensemble =                  (* ’a est le réservoir d’éléments 
 
 let rec cardinal = function Ve -> 0 | Ce (_, l) -> cardinal l + 1;;
 
+let rec isInList e = function Ve -> false | Ce (x, lp) -> e = x || (e > x) && isInList e lp;;
+
+let rec isIncludedIn l = function Ve -> true | Ce (x, lp) -> isInList x l && isIncludedIn l lp;;
