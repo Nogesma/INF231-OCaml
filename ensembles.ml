@@ -8,18 +8,17 @@ Mano Ségransan
 
 (* Q1: *)
 
-type 'a ensemble =                  (* ’a est le réservoir d’éléments *)
-        | Es                        (* V mis pour «vide», e pour «ensemble» *)
-        | Cs of 'a * 'a ensemble;;  (* C mis pour « constructeur » *)
+type 'a set =
+        | Es                   (* E: empty, s: set *)
+        | Cs of 'a * 'a set;;  (* C: constructor *)
 
 
 let rec cardinal = function Es -> 0 | Cs (_, l) -> cardinal l + 1;;
 
-let rec isInList e = function Es -> false | Cs (x, lp) -> e = x || (e > x) && isInList e lp;;
+let rec isInList a = function Es -> false | Cs (x, lp) -> a = x || (a > x) && isInList a lp;;
 
-let rec isIncludedIn l = function Es -> true | Cs (x, lp) -> isInList x l && isIncludedIn l lp;;
+let rec isIncludedIn s = function Es -> true | Cs (x, lp) -> isInList x s && isIncludedIn s lp;;
 
-let ajoute (a : _) (e : 'a ensemble) = if isInList a e then e else Cs(a,e);;
+let addElementToSet e s  = if isInList e s then s else Cs (e, s);;
 
-let rec supFromSet e = function Es -> Es | Cs (x, lp) -> lp ;;
-
+let supElementFromSet e = function Es -> Es | Cs (x, lp) -> lp;;
