@@ -1,2 +1,6 @@
 .idea/*
 .DS_Store
+*.cmi
+*.cmx
+*.o
+a.out
