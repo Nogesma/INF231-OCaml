@@ -14,7 +14,7 @@ let rec isInList e = function [] -> false | x::lp -> e = x || isInList e lp;;
 
 let rec isIncludedIn l = function [] -> true | x::lp -> isInList x l && isIncludedIn l lp;;
 
-let addElementToList e l  = if isInList e l then l else l@[e];;
+let addElementToList e l  = if isInList e l then l else e::l;;
 
 let rec supElementFromList e = function [] -> [] | x::lp ->
   if e = x
