@@ -1,10 +1,10 @@
 (*
-Ocaml Project - INF231 - 2019
-
-Benjamin Phénix
-Mano Ségransan
-
-*)
+ * Ocaml Project - INF231 - 2019
+ *
+ * Benjamin Phénix
+ * Mano Ségransan
+ *
+ *)
 
 (* Q2: *)
 
