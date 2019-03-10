@@ -6,6 +6,10 @@
  *
  *)
 
+
+(* Q4: *)
+
+
 type 'a multiElement = 'a * int;;
 type 'a multiSet = 'a multiElement list;;
 

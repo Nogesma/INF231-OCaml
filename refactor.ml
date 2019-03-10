@@ -8,6 +8,11 @@
 
 (* Q2: *)
 
+(*
+* For each function, we just addapt the code from sets.ml in order to use it for native lists
+* all the function work the same way as the old ones.
+*)
+
 let rec cardinal = function [] -> 0 | x::lp -> cardinal lp + 1;;
 
 let rec isInList e = function [] -> false | x::lp -> e = x || isInList e lp;;
