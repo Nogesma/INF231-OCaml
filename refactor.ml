@@ -14,52 +14,60 @@
 *)
 
 let rec cardinal =
-    function
-        [] -> 0
-        | x::lp -> cardinal lp + 1;;
+  function
+  | x::lp -> cardinal lp + 1
+  | [] -> 0
+;;
 
 let rec isInList e =
-    function
-        [] -> false
-        | x::lp -> e = x || isInList e lp;;
+  function
+  | x::lp -> e = x || isInList e lp
+  | [] -> false
+;;
 
 let rec isIncludedIn l =
-    function
-        [] -> true
-        | x::lp -> isInList x l && isIncludedIn l lp;;
+  function
+  | x::lp -> isInList x l && isIncludedIn l lp
+  | [] -> true
+;;
 
 let addElementToList e l  =
-    if isInList e l
-        then l
-        else e::l;;
+  if isInList e l
+  then l
+  else e::l
+;;
 
 let rec supElementFromList e =
-    function
-        [] -> []
-        | x::lp ->
-            if e = x
-                then lp
-                else x::(supElementFromList e lp);;
+  function
+  | x::lp ->
+    if e = x
+    then lp
+    else x::(supElementFromList e lp)
+  | [] -> []
+;;
 
 let listsAreEqual l1 l2 = isIncludedIn l1 l2 && isIncludedIn l2 l1;;
 
 let rec intersection l =
-    function
-        [] -> []
-        | x::lp ->
-            if isInList x l
-                then x::(intersection l lp)
-                else intersection l lp;;
+  function
+  | x::lp ->
+    if isInList x l
+    then x::(intersection l lp)
+    else intersection l lp
+  | [] -> []
+;;
 
 let rec union l =
-    function
-        [] -> l
-        | x::lp -> union (addElementToList x l) lp;;
+  function
+  | x::lp -> union (addElementToList x l) lp
+  | [] -> l
+;;
 
 let rec difference l =
-    function
-        [] -> l
-        | x::lp -> difference (supElementFromList x l) lp;;
+  function
+  | x::lp -> difference (supElementFromList x l) lp
+  | [] -> l
+;;
 
 let symetricalDifference l1 l2 = difference (union l1 l2) (intersection l1 l2);;
 
