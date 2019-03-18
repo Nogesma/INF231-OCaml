@@ -13,46 +13,69 @@
 * all the function work the same way as the old ones.
 *)
 
-let rec cardinal = function [] -> 0 | x::lp -> cardinal lp + 1;;
+let rec cardinal =
+    function
+        [] -> 0
+        | x::lp -> cardinal lp + 1;;
 
-let rec isInList e = function [] -> false | x::lp -> e = x || isInList e lp;;
+let rec isInList e =
+    function
+        [] -> false
+        | x::lp -> e = x || isInList e lp;;
 
-let rec isIncludedIn l = function [] -> true | x::lp -> isInList x l && isIncludedIn l lp;;
+let rec isIncludedIn l =
+    function
+        [] -> true
+        | x::lp -> isInList x l && isIncludedIn l lp;;
 
-let addElementToList e l  = if isInList e l then l else e::l;;
+let addElementToList e l  =
+    if isInList e l
+        then l
+        else e::l;;
 
-let rec supElementFromList e = function [] -> [] | x::lp ->
-  if e = x
-    then lp
-    else x::(supElementFromList e lp);;
+let rec supElementFromList e =
+    function
+        [] -> []
+        | x::lp ->
+            if e = x
+                then lp
+                else x::(supElementFromList e lp);;
 
 let listsAreEqual l1 l2 = isIncludedIn l1 l2 && isIncludedIn l2 l1;;
 
-let rec intersection l = function [] -> [] | x::lp ->
-  if isInList x l
-    then x::(intersection l lp)
-    else intersection l lp;;
+let rec intersection l =
+    function
+        [] -> []
+        | x::lp ->
+            if isInList x l
+                then x::(intersection l lp)
+                else intersection l lp;;
 
-let rec union l = function [] -> l | x::lp -> union (addElementToList x l) lp;;
+let rec union l =
+    function
+        [] -> l
+        | x::lp -> union (addElementToList x l) lp;;
 
-let rec difference l = function [] -> l | x::lp -> difference (supElementFromList x l) lp;;
+let rec difference l =
+    function
+        [] -> l
+        | x::lp -> difference (supElementFromList x l) lp;;
 
 let symetricalDifference l1 l2 = difference (union l1 l2) (intersection l1 l2);;
 
 (* Tests: OK *)
 
-cardinal [1; 2];;  (* 2 *)
-cardinal [];; (* 0 *)
+assert (cardinal [1; 2] = 2);;
+assert (cardinal [] = 0);;
 
-isInList 2 [1; 2];; (* true *)
-isInList 4 [1; 2];; (* false *)
+assert (isInList 2 [1; 2] = true);;
+assert (isInList 4 [1; 2] = false);;
 
-isIncludedIn [1; 2; 3] [2; 3];; (* true *)
-isIncludedIn [1; 2; 3] [4; 3];; (* false *)
+assert (isIncludedIn [1; 2; 3] [2; 3] = true);;
+assert (isIncludedIn [1; 2; 3] [4; 3] = false);;
 
-
-addElementToList 3 [1; 2];; (* [1; 2; 3] *)
-addElementToList 2 [1; 2];; (* [1; 2] *)
+assert (addElementToList 3 [1; 2] = [1; 2; 3]);;
+assert (addElementToList 2 [1; 2] = [1; 2]);;
 
 supElementFromList 3 [1; 2];; (* [1; 2] *)
 supElementFromList 3 [1; 2; 3];; (* [1; 2] *)

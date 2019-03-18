@@ -18,10 +18,9 @@ let supElementFromList e l = List.filter (fun x -> x <> e) l;;
 
 let intersection l1 l2 = List.filter (fun x -> isElementInList x l1) l2;;
 
-let union l1 l2 = l1 @ difference l2 l1;;
-
 let rec difference l1 l2 = List.filter (fun x -> not (isElementInList x l2)) l1;;
 
+let union l1 l2 = l1 @ difference l2 l1;;
 
 (* Tests: OK *)
 
