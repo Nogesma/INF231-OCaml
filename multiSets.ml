@@ -77,22 +77,16 @@ let rec del (x, n) =
   | [] -> []
 ;;
 
-(* Function wich verify if each MiltiSet is include in one another and return a boolean *)
+(* Function wich verify if each MultiSet is include in one another and return a boolean *)
 let equality ms1 ms2 = isIncludedIn ms1 ms2 && isIncludedIn ms2 ms1;;
 
-(* helper function *)
-let rec inter (x, n) = 
+(* Function wich return the difference between two MultiSets *)
+let rec intersection ms1 = 
   function
-  | (a, b)::lp ->
-    if a = x 
-    then [(a, if n < b then n else b)] 
-    else inter (x, n) lp
-  | [] -> []
-;;
-
-let rec intersection ms = 
-  function
-  | (a, b)::lp -> (inter (a, b) ms)@intersection ms lp
+  | (a, b)::lp -> 
+    if isInMS a ms1
+      then (a,if b >= occurences a ms1 then occurences a ms1 else b)::intersection ms1 lp
+    else intersection ms1 lp
   | [] -> []
 ;;
 
@@ -104,10 +98,16 @@ let rec union ms =
 
 let rec dif ms1 = 
   function
-    | (a,b)::lp -> dif (del (a,b) ms1) lp
+    | (a,b)::lp -> dif (del (a,0) ms1) lp
     | [] -> ms1
 ;;
 
+
+let rec difSym ms1 = 
+  function
+    | (a,b)::lp -> dif (del (a,b) ms1) lp
+    | [] -> ms1
+;;
 
 (* Tests: *)
 
@@ -146,3 +146,6 @@ assert (union [] [(2, 4); (1, 2); (3, 5)] = [(2, 4); (1, 2); (3, 5)]);;
 
 assert (dif [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(5, 4)]);;
 assert (dif [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = [(1, 2); (5, 4); (3, 3)]);;
+
+assert (difSym [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(5, 4)]);;
+assert (difSym [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = [(1, 2); (5, 4); (3, 3)]);;
