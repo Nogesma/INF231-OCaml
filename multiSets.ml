@@ -54,6 +54,8 @@ let rec isIncludedIn ms =
   | [] -> true
 ;;
 
+(* Function wich will add 1 to the second element from the tupple if the element is already present,
+   else it will add the element at the end of the Multiset by creating a new MultiElement *)
 let rec add e =
   function
   | (a, b)::lp ->
@@ -63,7 +65,8 @@ let rec add e =
   | [] -> [(e, 1)]
 ;;
 
-
+(* Function wich delet a MultiElement from a List if the element is in less quantity than the removing values,
+   If not, it will return a new MultiElement with less Element and the rest of the list *)
 let rec del (x, n) =
   function
   | (a, b)::lp ->
@@ -76,6 +79,7 @@ let rec del (x, n) =
   | [] -> []
 ;;
 
+(* Function wich verify if each MiltiSet is include in one another and return a boolean *)
 let equality ms1 ms2 = isIncludedIn ms1 ms2 && isIncludedIn ms2 ms1;;
 
 
