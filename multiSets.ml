@@ -85,7 +85,8 @@ let rec intersection ms1 =
   function
   | (a, b)::lp -> 
     if isInMS a ms1
-      then (a,if b >= occurences a ms1 then occurences a ms1 else b)::intersection ms1 lp
+    then let o = occurences a ms1 in 
+      (a, if b > o then o else b)::intersection ms1 lp
     else intersection ms1 lp
   | [] -> []
 ;;
@@ -96,18 +97,20 @@ let rec union ms =
   | [] -> ms
 ;;
 
-let rec dif ms1 = 
+let rec diff_v1 ms1 = 
   function
-    | (a,b)::lp -> dif (del (a,0) ms1) lp
-    | [] -> ms1
+  | (a, b)::lp -> diff_v1 (del (a, 0) ms1) lp
+  | [] -> ms1
 ;;
 
 
-let rec difSym ms1 = 
+let rec diff_v2 ms1 = 
   function
-    | (a,b)::lp -> dif (del (a,b) ms1) lp
-    | [] -> ms1
+  | (a, b)::lp -> diff_v2 (del (a, b) ms1) lp
+  | [] -> ms1
 ;;
+
+let diffSym ms1 ms2 = diff_v1 (union ms1 ms2) (intersection ms1 ms2);;
 
 (* Tests: *)
 
@@ -135,17 +138,17 @@ assert (del (5, 0) [(1, 2); (5, 8); (3, 5)] = [(1, 2); (3, 5)]);;
 assert (equality [(1, 2); (5, 4); (3, 5)] [(5, 4); (1, 2); (3, 5)] = true);;
 assert (equality [(1, 2); (5, 4); (3, 5)] [(2, 4); (1, 2); (3, 5)] = false);;
 
-assert (inter (1, 1) [(2, 4); (1, 2); (3, 5)] = [(1, 1)]);;
-assert (inter (1, 5) [(2, 4); (1, 3); (3, 5)] = [(1, 3)]);;
-
 assert (intersection [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(1, 2); (3, 3)]);;
 assert (intersection [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = []);;
 
 assert (union [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(1, 4); (5, 4); (3, 8); (2, 4)]);;
 assert (union [] [(2, 4); (1, 2); (3, 5)] = [(2, 4); (1, 2); (3, 5)]);;
 
-assert (dif [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(5, 4)]);;
-assert (dif [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = [(1, 2); (5, 4); (3, 3)]);;
+assert (diff_v1 [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(5, 4)]);;
+assert (diff_v1 [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = [(1, 2); (5, 4); (3, 3)]);;
 
-assert (difSym [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(5, 4)]);;
-assert (difSym [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = [(1, 2); (5, 4); (3, 3)]);;
+assert (diff_v2 [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(5, 4)]);;
+assert (diff_v2 [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = [(1, 2); (5, 4); (3, 3)]);;
+
+assert (diffSym [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(5, 4); (2, 4)]);;
+assert (diffSym [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = [(1, 2); (5, 4); (3, 3); (2, 4); (6, 2); (0, 5)]);;
