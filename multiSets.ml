@@ -63,7 +63,8 @@ let rec add (x, n) =
   | [] -> [(x, n)]
 ;;
 
-
+(* Function wich delet a MultiElement from a List if the element is in less quantity than the removing values,
+   If not, it will return a new MultiElement with less Element and the rest of the list *)
 let rec del (x, n) =
   function
   | (a, b)::lp ->
@@ -76,6 +77,7 @@ let rec del (x, n) =
   | [] -> []
 ;;
 
+(* Function wich verify if each MiltiSet is include in one another and return a boolean *)
 let equality ms1 ms2 = isIncludedIn ms1 ms2 && isIncludedIn ms2 ms1;;
 
 (* helper function *)
