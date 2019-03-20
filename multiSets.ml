@@ -54,13 +54,13 @@ let rec isIncludedIn ms =
   | [] -> true
 ;;
 
-let rec add e =
+let rec add (x, n) =
   function
   | (a, b)::lp ->
-    if a = e
-    then (a, (b + 1))::lp
-    else (a, b)::(add e lp)
-  | [] -> [(e, 1)]
+    if a = x
+    then (a, (b + n))::lp
+    else (a, b)::(add (x, n) lp)
+  | [] -> [(x, n)]
 ;;
 
 
@@ -78,6 +78,28 @@ let rec del (x, n) =
 
 let equality ms1 ms2 = isIncludedIn ms1 ms2 && isIncludedIn ms2 ms1;;
 
+(* helper function *)
+let rec inter (x, n) = 
+  function
+  | (a, b)::lp ->
+    if a = x 
+    then [(a, if n < b then n else b)] 
+    else inter (x, n) lp
+  | [] -> []
+;;
+
+let rec intersection ms = 
+  function
+  | (a, b)::lp -> (inter (a, b) ms)@intersection ms lp
+  | [] -> []
+;;
+
+let rec union ms =
+  function
+  | (a, b)::lp -> union (add (a, b) ms) lp
+  | [] -> ms
+;;
+
 
 (* Tests: *)
 
@@ -90,18 +112,26 @@ assert (occurences 0 [(1, 2); (2, 1); (3, 5)] = 0);;
 assert (isInMS 2 [(1, 2); (2, 1); (3, 5)] = true);;
 assert (isInMS 0 [(1, 2); (2, 1); (3, 5)] = false);;
 
-
 assert (isMEInMS (1, 1) [(1, 2); (2, 1); (3, 5)] = true);;
 assert (isMEInMS (1, 5) [(1, 2); (2, 1); (3, 5)] = false);;
 
 assert (isIncludedIn [(1, 2); (2, 1); (3, 5)] [(1, 1); (3, 5)] = true);;
 assert (isIncludedIn [(1, 2); (2, 1); (3, 5)] [(1, 2); (2, 2)] = false);;
 
-assert (add 5 [(1, 2); (2, 1); (3, 5)] = [(1, 2); (2, 1); (3, 5); (5, 1)]);;
-assert (add 5 [(1, 2); (5, 1); (3, 5)] = [(1, 2); (5, 2); (3, 5)]);;
+assert (add (5, 1) [(1, 2); (2, 1); (3, 5)] = [(1, 2); (2, 1); (3, 5); (5, 1)]);;
+assert (add (5, 2) [(1, 2); (5, 1); (3, 5)] = [(1, 2); (5, 3); (3, 5)]);;
 
 assert (del (5, 2) [(1, 2); (5, 4); (3, 5)] = [(1, 2); (5, 2); (3, 5)]);;
 assert (del (5, 0) [(1, 2); (5, 8); (3, 5)] = [(1, 2); (3, 5)]);;
 
 assert (equality [(1, 2); (5, 4); (3, 5)] [(5, 4); (1, 2); (3, 5)] = true);;
 assert (equality [(1, 2); (5, 4); (3, 5)] [(2, 4); (1, 2); (3, 5)] = false);;
+
+assert (inter (1, 1) [(2, 4); (1, 2); (3, 5)] = [(1, 1)]);;
+assert (inter (1, 5) [(2, 4); (1, 3); (3, 5)] = [(1, 3)]);;
+
+assert (intersection [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(1, 2); (3, 3)]);;
+assert (intersection [(1, 2); (5, 4); (3, 3)] [(2, 4); (6, 2); (0, 5)] = []);;
+
+assert (union [(1, 2); (5, 4); (3, 3)] [(2, 4); (1, 2); (3, 5)] = [(1, 4); (5, 4); (3, 8); (2, 4)]);;
+assert (union [] [(2, 4); (1, 2); (3, 5)] = [(2, 4); (1, 2); (3, 5)]);;
