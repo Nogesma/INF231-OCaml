@@ -1,14 +1,26 @@
 
-Ocaml Project - INF231 - 2019
+#  Ocaml Project - INF231 - 2019
 
-Benjamin Phénix
-Mano Ségransan
+By **Benjamin Phénix** & **Mano Ségransan**
 
 
-Explication des fichiers:
+## Project Structure
 
-sets.ml : the code from question 1 with some execution examples 
-refractor.ml : The adaptation of the code from question 1 to respond to question 2
-refractor_2.ml : the code for the third question with examples
-multi_sets.ml : The beginning of the question 4.
+The projet is constitued of one file per part:
 
+
+### 2) Ensembles
+
+The code is situated in the `sets.ml` file.
+
+### 3) Réusinage: listes Ocamlet ordre supérieur
+
+The code is situated in the `refactor.ml` file.
+
+### 4) Multi-ensembles
+
+The code is situated in the `multiSets.ml` file.
+
+### 5) Contrepet
+
+The code is situated in the `contrepet.ml` file.

@@ -37,17 +37,21 @@ let cst_DICO = add cst_DICO "beau";;
 
 type phrase = word list;;
 
-let supprimePrefixeCommun w1 w2 = 
+let supprimePrefixeCommun w1 w2 =
   if (List.hd w1) = (List.hd w2) 
   then ((List.tl w1), (List.tl w2)) 
   else (w1,w2)
 ;;
 
-let suffixeEgaux w1 w2 = 
+let suffixeEgaux w1 w2 =
   (List.tl w1) = (List.tl w2)
 ;;
 
-let motSontContrepet w1 w2 = suffixeEgaux w1 w2;;
+let rec contrepet ph =
+  function
+  | w::ls -> if w = (List.hd ph) then contrepet (List.tl ph) ls else  (w, (List.hd ph))::(contrepet (List.tl ph) ls)
+  | [] -> []
+;;
 
 assert (wordToList "test" = ['t'; 'e'; 's'; 't']);;
 assert (wordToList "" = []);;
@@ -60,6 +64,3 @@ assert (supprimePrefixeCommun (wordToList "test") (wordToList "on") = (['t'; 'e'
 
 assert (suffixeEgaux (wordToList "test") (wordToList "on") = false);;
 assert (suffixeEgaux (wordToList "test") (wordToList "cest") = true);;
-
-assert (motSontContrepet (wordToList "test") (wordToList "cest") = true);;
-assert (motSontContrepet (wordToList "test") (wordToList "ton") = false);;
