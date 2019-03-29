@@ -12,7 +12,7 @@
 (* Definition of our set wich is recursive *)
 type 'a set =
   | Es                  (* E: empty, s: set *)
-  | Cs of 'a * 'a set   (* C: constructor *)
+  | Cs of 'a * 'a set   (* Cs: constructor *)
 ;;
 
 
@@ -106,7 +106,6 @@ assert (isInSet 4 (Cs(1, Cs(2, Es))) = false);;
 
 assert (isIncludedIn (Cs(1, Cs(2, Cs(3, Es)))) (Cs(2, Cs(3, Es))) = true);;
 assert (isIncludedIn (Cs(1, Cs(2, Cs(3, Es)))) (Cs(4, Cs(3, Es))) = false);;
-
 
 assert (addElementToSet 3 (Cs(1, Cs(2, Es))) = Cs(3, Cs(1, Cs(2, Es))));;
 assert (addElementToSet 2 (Cs(1, Cs(2, Es))) = Cs(1, Cs(2, Es)));;
