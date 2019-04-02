@@ -77,7 +77,8 @@ let rec partieMot w i n =
 ;;
 
 (* non recursif *)
-let decompose w =
+(* not currently working *)
+(* let decompose w =
   let temp = [] in
   while List.length temp < List.length w do
     temp = (partieMot w 0 (List.length temp), partieMot w ((List.length temp)-1) (List.length temp), partieMot w (List.length temp) (List.length w))::temp
@@ -90,6 +91,7 @@ let rec decompose w i =
     (partieMot w 0 (List.length temp), partieMot w ((List.length temp)-1) (List.length temp), partieMot w (List.length temp) (List.length w))::decompose w i+1
   else []
 ;;
+*)
 
 
 
