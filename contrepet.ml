@@ -22,8 +22,8 @@ type 'a set =
 type dictionnary = word set;;
 
 (* Q8: *)
-let wordToList w = (List.init (String.length w) (String.get w));;
-let add dic word =  Cs((wordToList word), dic);;
+let wordToList (w :string) :char list = (List.init (String.length w) (String.get w));;
+let add (dic :dictionnary) (word :string) :dictionnary =  Cs((wordToList word), dic);;
 
 (* Q9: *)
 let cst_DICO = Es;;
@@ -42,58 +42,51 @@ let cst_DICO = add cst_DICO "beau";;
 type phrase = word list;;
 
 (* Q11: *)
-let supprimePrefixeCommun w1 w2 =
-  if (List.hd w1) = (List.hd w2) 
+let supprimePrefixeCommun (w1 :word) (w2 :word) :word * word =
+  if (List.hd w1) = (List.hd w2)
   then ((List.tl w1),(List.tl w2))
-  else (w1,w2)
+  else (w1, w2)
 ;;
 
-let suffixeEgaux w1 w2 =
+let suffixeEgaux (w1 :word) (w2 :word) :bool =
   w1 <> w2 && (List.tl w1) = (List.tl w2)
 ;;
 
 (* Q12: *)
-let motsSontContrepets (m1,m1_bis) (m2,m2_bis) = 
-  suffixeEgaux m1 m2 
-  && suffixeEgaux m1_bis m2_bis 
-  && supprimePrefixeCommun m1 m2_bis = supprimePrefixeCommun m2 m1_bis
+let motsSontContrepets ((m1, m1') :word * word) ((m2, m2') :word * word) :bool =
+  suffixeEgaux m1 m2
+  && suffixeEgaux m1' m2'
+  && supprimePrefixeCommun m1 m2' = supprimePrefixeCommun m2 m1'
 ;;
 
 (* Q13: *)
-let phraseContrepet p1 p2 = 
+let phraseContrepet (p1 :phrase) (p2 :phrase) :bool =
   let x = (List.filter (fun e -> List.for_all (fun x -> x <> e) p2) p1) in
   let y = (List.filter (fun e -> List.for_all (fun x -> x <> e) p1) p2) in
-  List.length x = 2 
-  && List.length y = 2 
+  List.length x = 2
+  && List.length y = 2
   && motsSontContrepets (List.nth x 0, List.nth x 1) (List.nth y 0, List.nth y 1)
  ;;
 
 (* Q14: *)
-let rec partieMot w i n = 
-  if i <> n then
-    (List.nth w i)::partieMot w (i+1) n
-  else
-    []
+
+let rec range ?i:(i=0) (j :int) :int list =
+  if i >= j
+  then []
+  else i :: (range ~i:(i + 1) j)
 ;;
 
-(* non recursif *)
-(* not currently working *)
-(* let decompose w =
-  let temp = [] in
-  while List.length temp < List.length w do
-    temp = (partieMot w 0 (List.length temp), partieMot w ((List.length temp)-1) (List.length temp), partieMot w (List.length temp) (List.length w))::temp
-  done
+let sublist (l :word) (s: int) (e :int) :word =
+  List.map (fun (_, x) -> x)
+    (List.filter (fun (i, _) -> i >= s && i < e)
+      (List.combine (range (List.length l)) l))
 ;;
 
-(* recursif *)
-let rec decompose w i =
-  if i < List.length w then
-    (partieMot w 0 (List.length temp), partieMot w ((List.length temp)-1) (List.length temp), partieMot w (List.length temp) (List.length w))::decompose w i+1
-  else []
+let rec decompose ?i:(i=0) (w :word) :'a list =
+  if i = (List.length w)
+  then []
+  else (sublist w 0 i, (List.nth w i), sublist w (i + 1) (List.length w))::(decompose ~i:(i + 1) w)
 ;;
-*)
-
-
 
 (* TESTS *)
 assert (wordToList "test" = ['t'; 'e'; 's'; 't']);;
@@ -115,3 +108,13 @@ assert (motsSontContrepets ((wordToList "linistre"),(wordToList "seche")) ((word
 assert (phraseContrepet [(wordToList "quelle"); (wordToList "min"); (wordToList "seche")] [(wordToList "quelle"); (wordToList "sin"); (wordToList "meche")] = true);;
 assert (phraseContrepet [(wordToList "quelle"); (wordToList "sin"); (wordToList "seche")] [(wordToList "quelle"); (wordToList "min"); (wordToList "meche")] = false);;
 
+assert (range 5 = [0; 1; 2; 3; 4]);;
+assert (range ~i:3 5 = [3; 4]);;
+assert (range ~i:6 5 = []);;
+
+assert (sublist (wordToList "test") 0 0 = []);;
+assert (sublist (wordToList "test") 0 3 = ['t'; 'e'; 's']);;
+assert (sublist (wordToList "test") 2 3 = ['s']);;
+
+assert (decompose (wordToList "test") = [([], 't', ['e'; 's'; 't']); (['t'], 'e', ['s'; 't']); (['t'; 'e'], 's', ['t']); (['t'; 'e'; 's'], 't', [])]);;
+assert (decompose (wordToList "sin") = [([], 's', ['i'; 'n']); (['s'], 'i', ['n']); (['s'; 'i'], 'n', [])]);;

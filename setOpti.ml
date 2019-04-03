@@ -40,7 +40,6 @@ let rec supElementFromSet (e :'a) =
   | Es -> Es
 ;;
 
-
 let setsAreEqual (s1 :'a orderedSet) (s2 :'a orderedSet) :bool = s1 = s2;;
 
 (* The intersection, union, difference and, symetricalDifference
