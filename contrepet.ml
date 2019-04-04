@@ -19,13 +19,16 @@ type 'a set =
 ;;
 
 (* Q7: *)
+
 type dictionnary = word set;;
 
 (* Q8: *)
+
 let wordToList (w :string) :char list = (List.init (String.length w) (String.get w));;
 let add (dic :dictionnary) (word :string) :dictionnary =  Cs((wordToList word), dic);;
 
 (* Q9: *)
+
 let cst_DICO = Es;;
 let cst_DICO = add cst_DICO "quelle";;
 let cst_DICO = add cst_DICO "ministre";;
@@ -39,9 +42,11 @@ let cst_DICO = add cst_DICO "et";;
 let cst_DICO = add cst_DICO "beau";;
 
 (* Q10: *)
+
 type phrase = word list;;
 
 (* Q11: *)
+
 let supprimePrefixeCommun (w1 :word) (w2 :word) :word * word =
   if (List.hd w1) = (List.hd w2)
   then ((List.tl w1),(List.tl w2))
@@ -53,6 +58,7 @@ let suffixeEgaux (w1 :word) (w2 :word) :bool =
 ;;
 
 (* Q12: *)
+
 let motsSontContrepets ((m1, m1') :word * word) ((m2, m2') :word * word) :bool =
   suffixeEgaux m1 m2
   && suffixeEgaux m1' m2'
@@ -60,6 +66,7 @@ let motsSontContrepets ((m1, m1') :word * word) ((m2, m2') :word * word) :bool =
 ;;
 
 (* Q13: *)
+
 let phraseContrepet (p1 :phrase) (p2 :phrase) :bool =
   let x = (List.filter (fun e -> List.for_all (fun x -> x <> e) p2) p1) in
   let y = (List.filter (fun e -> List.for_all (fun x -> x <> e) p1) p2) in
@@ -70,6 +77,7 @@ let phraseContrepet (p1 :phrase) (p2 :phrase) :bool =
 
 (* Q14: *)
 
+(* range is a subfunction wich is responsible for decomposing a certain part of a word *)
 let rec range ?i:(i=0) (j :int) :int list =
   if i >= j
   then []
@@ -82,11 +90,24 @@ let sublist (l :word) (s: int) (e :int) :word =
       (List.combine (range (List.length l)) l))
 ;;
 
+(* The recursive function wich deals with the word and separation and put the sublist in another list *)
 let rec decompose ?i:(i=0) (w :word) :'a list =
   if i = (List.length w)
   then []
   else (sublist w 0 i, (List.nth w i), sublist w (i + 1) (List.length w))::(decompose ~i:(i + 1) w)
 ;;
+
+(* Q15: *)
+let swap
+  ((p1, l1, s1) :word * letter * word)
+  ((p2, l2, s2) :word * char * word)
+  :(word * char * word) * (word * letter * word)
+  = ((p1, l2, s1), (p2, l1, s2))
+;;
+
+(* Q16: *)
+
+
 
 (* TESTS *)
 assert (wordToList "test" = ['t'; 'e'; 's'; 't']);;
@@ -118,3 +139,12 @@ assert (sublist (wordToList "test") 2 3 = ['s']);;
 
 assert (decompose (wordToList "test") = [([], 't', ['e'; 's'; 't']); (['t'], 'e', ['s'; 't']); (['t'; 'e'], 's', ['t']); (['t'; 'e'; 's'], 't', [])]);;
 assert (decompose (wordToList "sin") = [([], 's', ['i'; 'n']); (['s'], 'i', ['n']); (['s'; 'i'], 'n', [])]);;
+
+assert (swap (List.nth (decompose (wordToList "test")) 1) (List.nth (decompose (wordToList "sint")) 1) = ((['t'], 'i', ['s'; 't']), (['s'], 'e', ['n'; 't'])));;
+assert (swap (List.nth (decompose (wordToList "sin")) 0) (List.nth (decompose (wordToList "min")) 0)= (([], 'm', ['i'; 'n']), ([], 's', ['i'; 'n'])));;
+
+
+
+
+
+
