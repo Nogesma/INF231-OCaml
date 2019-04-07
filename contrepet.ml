@@ -106,6 +106,15 @@ let swap
 ;;
 
 (* Q16: *)
+(* let contrepet dic phr ?start(start=[])=
+  (*
+   * insert a function wich:
+   * Define phr1 as a contrepet if not possible then phr1 = phr
+   * Test for a certain word if by decomposing the rest of phr if there is a word in dic and if so do the back check
+   * Define next_word as the next word to check
+   * Careful about the presence of same contrepet in the final list (need to addapt isInList from "refracor.ml")
+   *)
+  if (phraseContrepet phr phr1)&& then phr1::(contrepet dic phr next_word) else (contrepet dic phr next_word) *)
 
 
 
@@ -141,9 +150,7 @@ assert (decompose (wordToList "test") = [([], 't', ['e'; 's'; 't']); (['t'], 'e'
 assert (decompose (wordToList "sin") = [([], 's', ['i'; 'n']); (['s'], 'i', ['n']); (['s'; 'i'], 'n', [])]);;
 
 assert (swap (List.nth (decompose (wordToList "test")) 1) (List.nth (decompose (wordToList "sint")) 1) = ((['t'], 'i', ['s'; 't']), (['s'], 'e', ['n'; 't'])));;
-assert (swap (List.nth (decompose (wordToList "sin")) 0) (List.nth (decompose (wordToList "min")) 0)= (([], 'm', ['i'; 'n']), ([], 's', ['i'; 'n'])));;
-
-
+assert (swap (List.nth (decompose (wordToList "sin")) 0) (List.nth (decompose (wordToList "min")) 0) = (([], 'm', ['i'; 'n']), ([], 's', ['i'; 'n'])));;
 
 
 
