@@ -6,6 +6,7 @@
  *
  *)
 
+open List;;
 (* Q2: *)
 
 (*
@@ -125,17 +126,17 @@ assert (symetricalDifference [0; 2] [1; 3] = [3; 1; 0; 2]);;
 
 (* Q3: *)
 
-let card (l :'a list) :int = List.length l;;
+let card (l :'a list) :int = length l;;
 
-let isElementInList (e :'a) (l :'a list) :bool = List.exists (fun x -> x = e) l;;
+let isElementInList (e :'a) (l :'a list) :bool = exists (fun x -> x = e) l;;
 
-let isListIncludedIn (l1 :'a list) (l2 :'a list) :bool = List.for_all (fun x -> isElementInList x l1) l2;;
+let isListIncludedIn (l1 :'a list) (l2 :'a list) :bool = for_all (fun x -> isElementInList x l1) l2;;
 
-let supElementFromList (e :'a) (l :'a list) :'a list = List.filter (fun x -> x <> e) l;;
+let supElementFromList (e :'a) (l :'a list) :'a list = filter (fun x -> x <> e) l;;
 
-let inter (l1 :'a list) (l2 :'a list) :'a list = List.filter (fun x -> isElementInList x l1) l2;;
+let inter (l1 :'a list) (l2 :'a list) :'a list = filter (fun x -> isElementInList x l1) l2;;
 
-let diff (l1 :'a list) (l2 :'a list) :'a list = List.filter (fun x -> not (isElementInList x l2)) l1;;
+let diff (l1 :'a list) (l2 :'a list) :'a list = filter (fun x -> not (isElementInList x l2)) l1;;
 
 let unionOfLists (l1 :'a list) (l2 :'a list) :'a list = l1 @ diff l2 l1;;
 

@@ -6,7 +6,7 @@
  *
  *)
 
-
+open List;;
 (* Q4: *)
 
 (*
@@ -20,8 +20,8 @@ type 'a multiSet = 'a multiElement list;;
 (* return a tuple (a,b) where a = numbers of differents elements/b = numbers of elements *)
 let cardinal (ms :'a multiSet) :int * int =
   (
-    List.length ms,
-    List.fold_left (+) 0 (List.map (fun (_, b) -> b) ms)
+    length ms,
+    fold_left (+) 0 (map (fun (_, b) -> b) ms)
   );;
 
 (* Itterate the set and return the number assiocated to the element e or 0 if e is not in the set *)

@@ -6,6 +6,7 @@
  *
  *)
 
+open List;;
 (* Q6: *)
 
 type letter = char;;
@@ -24,7 +25,7 @@ type dictionnary = word set;;
 
 (* Q8: *)
 
-let wordToList (w :string) :char list = (List.init (String.length w) (String.get w));;
+let wordToList (w :string) :char list = (init (String.length w) (String.get w));;
 let addWordToDic (dic :dictionnary) (word :string) :dictionnary =  Cs((wordToList word), dic);;
 
 (* Q9: *)
@@ -40,6 +41,9 @@ let cst_DICO = addWordToDic cst_DICO "fait";;
 let cst_DICO = addWordToDic cst_DICO "chaud";;
 let cst_DICO = addWordToDic cst_DICO "et";;
 let cst_DICO = addWordToDic cst_DICO "beau";;
+let cst_DICO = addWordToDic cst_DICO "rame";;
+let cst_DICO = addWordToDic cst_DICO "bare";;
+let cst_DICO = addWordToDic cst_DICO "tare";;
 
 (* Q10: *)
 
@@ -48,13 +52,18 @@ type phrase = word list;;
 (* Q11: *)
 
 let deletePrefix (w1 :word) (w2 :word) :word * word =
-  if (List.hd w1) = (List.hd w2)
-  then ((List.tl w1),(List.tl w2))
+  if (hd w1) = (hd w2)
+  then ((tl w1),(tl w2))
   else (w1, w2)
 ;;
 
 let sameSuffix (w1 :word) (w2 :word) :bool =
-  w1 <> w2 && (List.tl w1) = (List.tl w2)
+  w1 <> w2 && (tl w1) = (tl w2)
+;;
+
+
+let samePrefix (w1 :word) (w2 :word) :bool =
+  (hd w1) = (hd w2)
 ;;
 
 (* Q12: *)
@@ -68,11 +77,11 @@ let wordsAreSpoonerisms ((m1, m1') :word * word) ((m2, m2') :word * word) :bool 
 (* Q13: *)
 
 let phraseAreSpoonerisms (p1 :phrase) (p2 :phrase) :bool =
-  let x = (List.filter (fun e -> List.for_all (fun x -> x <> e) p2) p1) in
-  let y = (List.filter (fun e -> List.for_all (fun x -> x <> e) p1) p2) in
-  List.length x = 2
-  && List.length y = 2
-  && wordsAreSpoonerisms (List.nth x 0, List.nth x 1) (List.nth y 0, List.nth y 1)
+  let x = (filter (fun e -> for_all (fun x -> x <> e) p2) p1) in
+  let y = (filter (fun e -> for_all (fun x -> x <> e) p1) p2) in
+  length x = 2
+  && length y = 2
+  && wordsAreSpoonerisms (nth x 0, nth x 1) (nth y 0, nth y 1)
  ;;
 
 (* Q14: *)
@@ -86,16 +95,16 @@ let rec range ?i:(i=0) (j :int) :int list =
 
 (* sublist is a subfunction used by splitWord, which return the part of the given list within the given indexes *)
 let sublist (l :word) (s: int) (e :int) :word =
-  List.map (fun (_, x) -> x)
-    (List.filter (fun (i, _) -> i >= s && i < e)
-      (List.combine (range (List.length l)) l))
+  map (fun (_, x) -> x)
+    (filter (fun (i, _) -> i >= s && i < e)
+      (combine (range (length l)) l))
 ;;
 
 (* The recursive function wich deals with the word and separation and put the sublist in another list *)
 let rec splitWord ?i:(i=0) (w :word) :'a list =
-  if i = (List.length w)
+  if i = (length w)
   then []
-  else (sublist w 0 i, (List.nth w i), sublist w (i + 1) (List.length w))::(splitWord ~i:(i + 1) w)
+  else (sublist w 0 i, (nth w i), sublist w (i + 1) (length w))::(splitWord ~i:(i + 1) w)
 ;;
 
 (* Q15: *)
@@ -107,15 +116,36 @@ let swap
 ;;
 
 (* Q16: *)
-(* let contrepet dic phr ?start(start=[])=
-  (*
-   * insert a function wich:
-   * Define phr1 as a contrepet if not possible then phr1 = phr
-   * Test for a certain word if by decomposing the rest of phr if there is a word in dic and if so do the back check
-   * Define next_word as the next word to check
-   * Careful about the presence of same contrepet in the final list (need to addapt isInList from "refracor.ml")
-   *)
-  if (phraseContrepet phr phr1)&& then phr1::(contrepet dic phr next_word) else (contrepet dic phr next_word) *)
+
+(*
+ * Function wich will return a list of phrase
+ * Not twice the same
+ * Maybe start by listing the words with the same head within the Dico
+ * after importing the dic removing all the words that don'tcorrespond to the he
+ * Then Verify for each word of the Dico, that there are Word within the phrase that have the same tail
+ * and verify that they have a head that is within Dico with the tail of w1
+ * After Checking for each word we should have a list empty if none has been foud
+ * or a list with tuples of 2 tuples with w1 and his tail-equivalent in the dic and w2 and his tail equivalent within Dic
+ * Then what must be done is Create all the phrases that have both words as a contrepet
+ *)
+
+(* let filter dic phrase =
+
+
+ouais je pense faut déjà "purge" le dic de tout les mots qui commencent pas
+par la même lettre qu'un mot dans la phrase
+
+enfin, on peut même filtrer par tous les mots qui ont pas un suffixe commun a un mot dans la phrase
+
+Pour aller vers set on peut utiliser fold left peut etre ... *)
+
+let rec getHeadsFromDic w =
+  function
+    | [] -> []
+    | dic1::rest -> if samePrefix w dic1
+      then dic1::getHeadsFromDic w rest
+      else getHeadsFromDic w rest
+;;
 
 
 
@@ -150,8 +180,8 @@ assert (sublist (wordToList "test") 2 3 = ['s']);;
 assert (splitWord (wordToList "test") = [([], 't', ['e'; 's'; 't']); (['t'], 'e', ['s'; 't']); (['t'; 'e'], 's', ['t']); (['t'; 'e'; 's'], 't', [])]);;
 assert (splitWord (wordToList "sin") = [([], 's', ['i'; 'n']); (['s'], 'i', ['n']); (['s'; 'i'], 'n', [])]);;
 
-assert (swap (List.nth (splitWord (wordToList "test")) 1) (List.nth (splitWord (wordToList "sint")) 1) = ((['t'], 'i', ['s'; 't']), (['s'], 'e', ['n'; 't'])));;
-assert (swap (List.nth (splitWord (wordToList "sin")) 0) (List.nth (splitWord (wordToList "min")) 0) = (([], 'm', ['i'; 'n']), ([], 's', ['i'; 'n'])));;
+assert (swap (nth (splitWord (wordToList "test")) 1) (nth (splitWord (wordToList "sint")) 1) = ((['t'], 'i', ['s'; 't']), (['s'], 'e', ['n'; 't'])));;
+assert (swap (nth (splitWord (wordToList "sin")) 0) (nth (splitWord (wordToList "min")) 0) = (([], 'm', ['i'; 'n']), ([], 's', ['i'; 'n'])));;
 
 
 

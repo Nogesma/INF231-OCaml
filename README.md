@@ -20,7 +20,7 @@ The code is in the `multiSets.ml` file.
 
 ### 5) Contrepet
 
-The code is in the `contrepet.ml` file.
+The code is in the `spoonerisms.ml` file.
 
 ### 6) Optimisations et extensions
 
