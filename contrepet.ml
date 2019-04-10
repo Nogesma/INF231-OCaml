@@ -63,7 +63,7 @@ let sameSuffix (w1 :word) (w2 :word) :bool =
 
 
 let samePrefix (w1 :word) (w2 :word) :bool =
-  (hd w1) = (hd w2)
+  w1 <> w2 && (hd w1) = (hd w2)
 ;;
 
 (* Q12: *)
@@ -96,7 +96,7 @@ let rec range ?i:(i=0) (j :int) :int list =
 (* sublist is a subfunction used by splitWord, which return the part of the given list within the given indexes *)
 let sublist (l :word) (s: int) (e :int) :word =
   map (fun (_, x) -> x)
-    (filter (fun (i, _) -> i >= s && i < e)
+    (filter (fun (i, _) -> ((i >= s)&&(i < e)))
       (combine (range (length l)) l))
 ;;
 
@@ -121,7 +121,7 @@ let swap
  * Function wich will return a list of phrase
  * Not twice the same
  * Maybe start by listing the words with the same head within the Dico
- * after importing the dic removing all the words that don'tcorrespond to the he
+ * after importing the dic removing all the words that don't correspond to the head
  * Then Verify for each word of the Dico, that there are Word within the phrase that have the same tail
  * and verify that they have a head that is within Dico with the tail of w1
  * After Checking for each word we should have a list empty if none has been foud
@@ -146,6 +146,22 @@ let rec getHeadsFromDic w =
       then dic1::getHeadsFromDic w rest
       else getHeadsFromDic w rest
 ;;
+
+let rec getTailsFromDic w =
+  function
+    | [] -> []
+    | dic1::rest -> if sameSuffix w dic1
+      then dic1::getHeadsFromDic w rest
+      else getHeadsFromDic w rest
+;;
+
+
+(* function wich will return a list of tuples of words that are contrepet of w1 w2 *)
+let searchInDic w1 w2 dic = false
+  (* That's exactly what I don't know how to do !! *)
+;;
+
+
 
 
 
