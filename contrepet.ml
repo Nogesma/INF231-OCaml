@@ -111,8 +111,8 @@ let rec splitWord ?i:(i=0) (w :word) :'a list =
 let swap
   ((p1, l1, s1) :word * letter * word)
   ((p2, l2, s2) :word * char * word)
-  :(word * char * word) * (word * letter * word)
-  = ((p1, l2, s1), (p2, l1, s2))
+  :(word) * (word)
+  = (p1@(l2::s1)),(p2@(l1::s2))
 ;;
 
 (* Q16: *)
@@ -129,37 +129,9 @@ let swap
  * Then what must be done is Create all the phrases that have both words as a contrepet
  *)
 
-(* let filter dic phrase =
-
-
-ouais je pense faut déjà "purge" le dic de tout les mots qui commencent pas
-par la même lettre qu'un mot dans la phrase
-
-enfin, on peut même filtrer par tous les mots qui ont pas un suffixe commun a un mot dans la phrase
-
-Pour aller vers set on peut utiliser fold left peut etre ... *)
-
-let rec getHeadsFromDic w =
-  function
-    | [] -> []
-    | dic1::rest -> if samePrefix w dic1
-      then dic1::getHeadsFromDic w rest
-      else getHeadsFromDic w rest
-;;
-
-let rec getTailsFromDic w =
-  function
-    | [] -> []
-    | dic1::rest -> if sameSuffix w dic1
-      then dic1::getHeadsFromDic w rest
-      else getHeadsFromDic w rest
-;;
-
-
-(* function wich will return a list of tuples of words that are contrepet of w1 w2 *)
-let searchInDic w1 w2 dic = false
-  (* That's exactly what I don't know how to do !! *)
-;;
+(* let contrepetrie dic phr =
+  j
+;; *)
 
 
 
@@ -196,8 +168,8 @@ assert (sublist (wordToList "test") 2 3 = ['s']);;
 assert (splitWord (wordToList "test") = [([], 't', ['e'; 's'; 't']); (['t'], 'e', ['s'; 't']); (['t'; 'e'], 's', ['t']); (['t'; 'e'; 's'], 't', [])]);;
 assert (splitWord (wordToList "sin") = [([], 's', ['i'; 'n']); (['s'], 'i', ['n']); (['s'; 'i'], 'n', [])]);;
 
-assert (swap (nth (splitWord (wordToList "test")) 1) (nth (splitWord (wordToList "sint")) 1) = ((['t'], 'i', ['s'; 't']), (['s'], 'e', ['n'; 't'])));;
-assert (swap (nth (splitWord (wordToList "sin")) 0) (nth (splitWord (wordToList "min")) 0) = (([], 'm', ['i'; 'n']), ([], 's', ['i'; 'n'])));;
+assert (swap (nth (splitWord (wordToList "test")) 1) (nth (splitWord (wordToList "sint")) 1) = (['t'; 'i'; 's'; 't'], ['s'; 'e'; 'n'; 't']));;
+assert (swap (nth (splitWord (wordToList "sin")) 0) (nth (splitWord (wordToList "min")) 0) = (['m'; 'i'; 'n'], ['s'; 'i'; 'n']));;
 
 
 
