@@ -111,28 +111,15 @@ let rec splitWord ?i:(i=0) (w :word) :'a list =
 let swap
   ((p1, l1, s1) :word * letter * word)
   ((p2, l2, s2) :word * char * word)
-  :(word) * (word)
-  = (p1@(l2::s1)),(p2@(l1::s2))
+  :word * word
+  = p1@l2::s1, p2@l1::s2
 ;;
 
 (* Q16: *)
 
-(*
- * Function wich will return a list of phrase
- * Not twice the same
- * Maybe start by listing the words with the same head within the Dico
- * after importing the dic removing all the words that don't correspond to the head
- * Then Verify for each word of the Dico, that there are Word within the phrase that have the same tail
- * and verify that they have a head that is within Dico with the tail of w1
- * After Checking for each word we should have a list empty if none has been foud
- * or a list with tuples of 2 tuples with w1 and his tail-equivalent in the dic and w2 and his tail equivalent within Dic
- * Then what must be done is Create all the phrases that have both words as a contrepet
- *)
+(* let rec contrepetrie dic phr =
 
-(* let contrepetrie dic phr =
-  j
 ;; *)
-
 
 
 
