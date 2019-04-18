@@ -117,10 +117,45 @@ let swap
 
 (* Q16: *)
 
-(* let rec contrepetrie dic phr =
+let firstElement = function
+  |[] -> []
+  | e::r -> e
+;;
 
-;; *)
+let rec inDic (dic:dictionnary) (l :list) :list = function
+  | [] -> []
+  | e::r -> for w in dic do if (e == w) then e::(inDic dic r) else (inDic dic r)
+;;
 
+let rec listSwap w =
+  function
+  | [] -> []
+  | e::r -> match (swap w e) with (w1,w2) -> w1::listSwap w r
+;;
+
+let Spoonerism dic phr =
+  List.map listSwap (List.map firstElement (List.map splitWord phr)) (List.map firstElement (List.map splitWord phr))
+  
+;;
+
+
+
+(* let fonctionTropCoool a b = map (fun y -> map (fun x -> x * y) a) b;; *)
+
+(*
+# let fonctionTropCoool a b = map (fun y -> map (fun x -> x * y) a) b;;
+val fonctionTropCoool : int list -> int list -> int list list = <fun>
+# fonctionTropCoool [1; 2; 3] [4; 5; 6];;
+- : int list list = [[4; 8; 12]; [5; 10; 15]; [6; 12; 18]]
+*)
+
+
+
+(*
+# fonctionTropCoool [1; 2; 3] [2; 9; 1];;
+- : bool list list =
+[[false; true; false]; [false; false; false]; [true; false; false]]
+*)
 
 
 
