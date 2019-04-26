@@ -93,7 +93,9 @@ let rec range ?i:(i=0) (j :int) :int list =
   else i :: (range ~i:(i + 1) j)
 ;;
 
-(* sublist is a subfunction used by splitWord, which return the part of the given list within the given indexes *)
+(* sublist is a subfunction used by splitWord,
+ * which return the part of the given list within the given indexes
+ *)
 let sublist (l :word) (s: int) (e :int) :word =
   map (fun (_, x) -> x)
     (filter (fun (i, _) -> ((i >= s)&&(i < e)))
@@ -117,25 +119,30 @@ let swap
 
 (* Q16: *)
 
-let firstElement = function
-  |[] -> []
-  | e::r -> e
+let rec isInDic (e :'a) =
+  function
+  | Cs (hd, tl) -> e = hd || isInDic e tl
+  | Es -> false
 ;;
 
-let rec inDic (dic:dictionnary) (l :list) :list = function
+let rec inDic (dic:dictionnary) =
+  function
+  | hd::tl ->
+    if isInDic hd dic
+    then hd::(inDic dic tl)
+    else (inDic dic tl)
   | [] -> []
-  | e::r -> for w in dic do if (e == w) then e::(inDic dic r) else (inDic dic r)
 ;;
 
 let rec listSwap w =
   function
+  | hd::tl -> let (w1, w2) = swap w hd in w1::listSwap w tl
   | [] -> []
-  | e::r -> match (swap w e) with (w1,w2) -> w1::listSwap w r
 ;;
 
-let Spoonerism dic phr =
-  List.map listSwap (List.map firstElement (List.map splitWord phr)) (List.map firstElement (List.map splitWord phr))
-  
+let spoonerism dic phr =
+  map hd (map splitWord phr)
+  (* map listSwap (map firstElement (map splitWord phr)) *)
 ;;
 
 

@@ -4,3 +4,4 @@
 *.cmx
 *.o
 a.out
+.vscode/
