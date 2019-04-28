@@ -47,9 +47,12 @@ let addMeToMs ((x, y) :'a multiElement) (ms :'a multiSet) :'a multiSet =
   else (x, y)::ms
 ;;
 
-(* Function wich delet a MultiElement from a List if the element is in less quantity than the removing values,
-   If not, it will return a new MultiElement with less Element and the rest of the list *)
-let supMeFromMs ((x, y) :'a multiElement) (ms1 :'a multiSet) =
+(* Function wich delet a MultiElement from a List if the
+ * element is in less quantity than the removing values,
+ * if not, it will return a new MultiElement with less Element and the rest of the list
+ *)
+
+let supMeFromMs ((x, y) :'a multiElement) (ms1 :'a multiSet) :'a multiSet =
   fold_left (fun ms (a, b) ->
     if a = x
     then
@@ -64,30 +67,31 @@ let supMeFromMs ((x, y) :'a multiElement) (ms1 :'a multiSet) =
 let msAreEqual (ms1 :'a multiSet) (ms2 :'a multiSet) :bool = isIncludedIn ms1 ms2 && isIncludedIn ms2 ms1;;
 
 (* Function wich return the difference between two MultiSets *)
-let intersection (ms1 :'a multiSet) (ms2 :'a multiSet) =
+let intersection (ms1 :'a multiSet) (ms2 :'a multiSet) :'a multiSet =
   fold_left (
     fun ms (a, b) ->
     let o = occurences a ms2 in
       if o <> 0
-      then
-        (a, if b > o then o else b)::ms
+      then (a, if b > o then o else b)::ms
       else ms
     ) [] ms1
 ;;
 
 let union (ms1 :'a multiSet) (ms2 :'a multiSet) :'a multiSet =
-  fold_left (fun ms me -> addMeToMs me ms) ms1 ms2;;
+  fold_left (fun ms me -> addMeToMs me ms) ms1 ms2
+;;
 
-let diff1 (ms1 :'a multiSet) (ms2 :'a multiSet)  =
+let diff1 (ms1 :'a multiSet) (ms2 :'a multiSet) :'a multiSet =
   fold_left (fun ms (a, b) -> supMeFromMs (a, 0) ms) ms1 ms2
 ;;
 
-
-let diff2 (ms1 :'a multiSet) (ms2 :'a multiSet) =
+let diff2 (ms1 :'a multiSet) (ms2 :'a multiSet) :'a multiSet =
   fold_left (fun ms (a, b) -> supMeFromMs (a, b) ms) ms1 ms2
 ;;
 
-let diffSym (ms1 :'a multiSet) (ms2 :'a multiSet) :'a multiSet = diff1 (union ms1 ms2) (intersection ms1 ms2);;
+let diffSym (ms1 :'a multiSet) (ms2 :'a multiSet) :'a multiSet =
+  diff1 (union ms1 ms2) (intersection ms1 ms2)
+;;
 
 (* Tests: *)
 

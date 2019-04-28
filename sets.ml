@@ -11,7 +11,7 @@
 (* Q1: *)
 
 
-(* Definition of our set wich is recursive *)
+(* Definition of the recursive set *)
 type 'a set =
   | Es                  (* E: empty, s: set *)
   | Cs of 'a * 'a set   (* Cs: constructor *)
@@ -52,7 +52,7 @@ let addElementToSet (e :'a) (s :'a set) :'a set =
 
 (* Iterates over the set until it reaches the end whilst checking if the current element is equal to e,
  * if it is, call the function again without the current element
-*)
+ *)
 let rec supElementFromSet (e :'a)  =
   function
   | Cs (hd, tl) ->
@@ -95,7 +95,9 @@ let rec difference (s :'a set) =
 
 
 (* difference of the union and the intersection of two sets *)
-let symetricalDifference (s1 :'a set) (s2 :'a set) :'a set = difference (union s1 s2) (intersection s1 s2);;
+let symetricalDifference (s1 :'a set) (s2 :'a set) :'a set =
+  difference (union s1 s2) (intersection s1 s2)
+;;
 
 
 (* Tests: *)

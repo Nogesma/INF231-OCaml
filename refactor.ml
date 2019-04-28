@@ -10,8 +10,8 @@ open List;;
 (* Q2: *)
 
 (*
-* For each function, we just addapt the code from sets.ml in order to use it   * for native lists
-* all the function work the same way as the old ones.
+* For each function, we just addapt the code from sets.ml in order to use it for native lists
+* all the function work the same way as the other ones.
 *)
 
 let rec cardinal =
@@ -70,7 +70,9 @@ let rec difference (l :'a list) =
   | [] -> l
 ;;
 
-let symetricalDifference (l1 :'a list) (l2 :'a list) :'a list = difference (union l1 l2) (intersection l1 l2);;
+let symetricalDifference (l1 :'a list) (l2 :'a list) :'a list =
+  difference (union l1 l2) (intersection l1 l2)
+;;
 
 (* Tests: *)
 

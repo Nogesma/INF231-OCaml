@@ -53,7 +53,7 @@ type phrase = word list;;
 
 let deletePrefix (w1 :word) (w2 :word) :word * word =
   if (hd w1) = (hd w2)
-  then ((tl w1),(tl w2))
+  then ((tl w1), (tl w2))
   else (w1, w2)
 ;;
 
@@ -82,7 +82,7 @@ let phraseAreSpoonerisms (p1 :phrase) (p2 :phrase) :bool =
   length x = 2
   && length y = 2
   && wordsAreSpoonerisms (nth x 0, nth x 1) (nth y 0, nth y 1)
- ;;
+;;
 
 (* Q14: *)
 
@@ -104,7 +104,7 @@ let sublist (l :word) (s: int) (e :int) :word =
 
 (* The recursive function wich deals with the word and separation and put the sublist in another list *)
 let rec splitWord ?i:(i=0) (w :word) :'a list =
-  if i = (length w)
+  if i = length w
   then []
   else (sublist w 0 i, (nth w i), sublist w (i + 1) (length w))::(splitWord ~i:(i + 1) w)
 ;;
@@ -116,55 +116,6 @@ let swap
   :word * word
   = p1@l2::s1, p2@l1::s2
 ;;
-
-(* Q16: *)
-
-let rec isInDic (e :'a) =
-  function
-  | Cs (hd, tl) -> e = hd || isInDic e tl
-  | Es -> false
-;;
-
-let rec inDic (dic:dictionnary) =
-  function
-  | hd::tl ->
-    if isInDic hd dic
-    then hd::(inDic dic tl)
-    else (inDic dic tl)
-  | [] -> []
-;;
-
-let rec listSwap w =
-  function
-  | hd::tl -> let (w1, w2) = swap w hd in w1::listSwap w tl
-  | [] -> []
-;;
-
-let spoonerism dic phr =
-  map hd (map splitWord phr)
-  (* map listSwap (map firstElement (map splitWord phr)) *)
-;;
-
-
-
-(* let fonctionTropCoool a b = map (fun y -> map (fun x -> x * y) a) b;; *)
-
-(*
-# let fonctionTropCoool a b = map (fun y -> map (fun x -> x * y) a) b;;
-val fonctionTropCoool : int list -> int list -> int list list = <fun>
-# fonctionTropCoool [1; 2; 3] [4; 5; 6];;
-- : int list list = [[4; 8; 12]; [5; 10; 15]; [6; 12; 18]]
-*)
-
-
-
-(*
-# fonctionTropCoool [1; 2; 3] [2; 9; 1];;
-- : bool list list =
-[[false; true; false]; [false; false; false]; [true; false; false]]
-*)
-
-
 
 (* TESTS *)
 assert (wordToList "test" = ['t'; 'e'; 's'; 't']);;
@@ -199,7 +150,3 @@ assert (splitWord (wordToList "sin") = [([], 's', ['i'; 'n']); (['s'], 'i', ['n'
 
 assert (swap (nth (splitWord (wordToList "test")) 1) (nth (splitWord (wordToList "sint")) 1) = (['t'; 'i'; 's'; 't'], ['s'; 'e'; 'n'; 't']));;
 assert (swap (nth (splitWord (wordToList "sin")) 0) (nth (splitWord (wordToList "min")) 0) = (['m'; 'i'; 'n'], ['s'; 'i'; 'n']));;
-
-
-
-
